@@ -5,6 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import Input from "./common/Input";
 import { loginSchema, signupSchema } from "@libs/schemaValidation";
+import axios from "axios";
+import { useAuthDispatch } from "src/contexts/auth.context";
+import { useRouter } from "next/dist/client/router";
+import apiClient from "helpers/apiClient";
 
 export interface Inputs {
   name: string;
@@ -16,6 +20,11 @@ export interface Inputs {
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const dispatch = useAuthDispatch();
+
+  const router = useRouter();
 
   const {
     register,
@@ -26,8 +35,29 @@ const Auth = () => {
     resolver: yupResolver(isLogin ? loginSchema : signupSchema),
   });
 
-  const handleAuth = (data : Inputs) => {
-    console.log(data);
+  const handleAuth = async (data: any) => {
+    const url = isLogin ? "/api/auth/login" : "/api/auth/signup";
+
+    try {
+      setLoading(true);
+      const { data: responseData } = await apiClient({
+        method: "POST",
+        url,
+        data,
+      });
+
+      console.log({ responseData });
+      dispatch({
+        type: "SET_USER",
+        payload: responseData,
+      });
+
+      router.push("/");
+    } catch (error) {
+      setErrorMessage(error.response?.data.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +70,13 @@ const Auth = () => {
           <Input label="Username" register={register} fieldName="username" errors={errors} />
         </div>
         {!isLogin && <Input label="Email" register={register} fieldName="email" errors={errors} />}
-        <Input label="Password" register={register} fieldName="password" errors={errors} />
+        <Input
+          label="Password"
+          register={register}
+          fieldName="password"
+          errors={errors}
+          type="password"
+        />
 
         <button
           className="flex items-center justify-center p-2 text-lg font-bold text-white bg-blue-700 rounded-md focus:outline-none"
