@@ -9,6 +9,7 @@ import axios from "axios";
 import { useAuthDispatch } from "src/contexts/auth.context";
 import { useRouter } from "next/dist/client/router";
 import apiClient from "helpers/apiClient";
+import { GetServerSidePropsContext } from "next";
 
 export interface Inputs {
   name: string;
@@ -54,7 +55,8 @@ const Auth = () => {
 
       router.push("/");
     } catch (error) {
-      setErrorMessage(error.response?.data.message);
+      console.log(error.message);
+      setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
@@ -86,11 +88,17 @@ const Auth = () => {
         </button>
       </form>
 
-      <p className="p-1 text-center text-red-600 ">Something went wrong</p>
+      {errorMessage && <p className="p-1 text-center text-red-600 ">{errorMessage}</p>}
 
       <p className="text-lg tracking-wide text-center text-white">
         {!isLogin ? "Already a member?" : "Don't have an account yet?"}
-        <span className="cursor-pointer" onClick={() => setIsLogin(!isLogin)}>
+        <span
+          className="cursor-pointer"
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setErrorMessage(null);
+          }}
+        >
           {!isLogin ? " Sign In" : " Sign Up"}
         </span>
       </p>

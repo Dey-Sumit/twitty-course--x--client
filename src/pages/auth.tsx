@@ -1,9 +1,31 @@
 import Image from "next/image";
 import heroImage from "@public/hero.png";
 import logo from "@public/logo.svg";
-import Auth from "@components/Auth";
+import AuthComponent from "@components/Auth";
+import axios from "axios";
+import { GetServerSidePropsContext } from "next";
+import { useAuthState } from "src/contexts/auth.context";
+import { useRouter } from "next/dist/client/router";
+import { useEffect } from "react";
 
-const auth = () => {
+const Auth = () => {
+  const { loading, user } = useAuthState();
+  //console.log({ loading, user });
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   if (loading && user) {
+  //     router.back();
+  //   }
+  // }, [loading, user]);
+
+  // if (loading)
+  //   return (
+  //     <div className="grid h-screen place-items-center">
+  //       <Image src={logo} alt="logo" width={100} height={100} />
+  //     </div>
+  //   );
+
   return (
     <div className="grid h-screen grid-cols-8 text-white">
       {/* left part */}
@@ -31,4 +53,30 @@ const auth = () => {
   );
 };
 
-export default auth;
+export default Auth;
+
+// // TODO make this function reusable
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   try {
+//     const cookie = context.req.headers.cookie;
+
+//     // it returns 401 if the user is not authenticated
+//     const { data: user } = await axios.get(`${process.env.API_BASE_ENDPOINT}/api/auth/me`, {
+//       headers: { cookie },
+//       withCredentials: true,
+//     });
+
+//     console.log({ user });
+
+//     return {
+//       redirect: {
+//         destination: "/",
+//         statusCode: 302,
+//       },
+//     };
+//   } catch (error) {
+//     return {
+//       props: {},
+//     };
+//   }
+// }
