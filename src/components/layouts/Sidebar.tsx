@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { FC, MouseEventHandler } from "react";
 
 import { IoMdHome, IoMdLogOut, IoMdNotifications } from "react-icons/io";
@@ -8,11 +7,16 @@ import { RiUserFill } from "react-icons/ri";
 import { IconType } from "react-icons";
 import { useAuthState } from "src/contexts/auth.context";
 import { useRouter } from "next/router";
+import { useLayoutDispatch, useLayoutState } from "src/contexts/layout.context";
 
 const Sidebar = () => {
   const { user } = useAuthState();
-  const showNavbar = true;
+
   const router = useRouter();
+
+  const layoutDispatch = useLayoutDispatch();
+  const { showNavbar } = useLayoutState();
+
   return (
     <div
       className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg flex z-10 sm:sticky top-0   max-w-max transform transition-all duration-300 ${
@@ -20,7 +24,11 @@ const Sidebar = () => {
       }`}
     >
       {/* <div className="flex items-center justify-center space-x-2 font-medium "> */}
-      <SiTwitter className="mx-auto cursor-pointer text-primary" size="30" onClick={() => router.push("/")} />
+      <SiTwitter
+        className="mx-auto cursor-pointer text-primary"
+        size="30"
+        onClick={() => layoutDispatch({ type: "TOGGLE_NAVBAR" })}
+      />
       {/* </div> */}
       <div className="flex flex-col space-y-5 ">
         <SidebarItem Icon={IoMdHome} text="Home" handler={() => router.push("/")} />
