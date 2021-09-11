@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@components/Input";
 
 import { loginSchema, signupSchema } from "@libs/schemaValidation";
+import { useAuthDispatch } from "src/contexts/auth.context";
 
 const AuthComponent = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,7 +25,7 @@ const AuthComponent = () => {
 
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const dispatch = useAuthDispatch();
   const handleAuth = async (data: any) => {
     const url = isLogin ? "/api/auth/login" : "/api/auth/signup";
 
@@ -34,9 +35,10 @@ const AuthComponent = () => {
         method: "POST",
         url,
         data,
-        // withCredentials: true,
       });
-      console.log({ res });
+
+      dispatch({ type: "SET_USER", payload: res.data });
+      router.push("/");
     } catch (error) {
       setErrorMessage(error.response.data.message);
     } finally {
@@ -48,9 +50,7 @@ const AuthComponent = () => {
     <div className="w-full p-2 mx-auto space-y-4 md:max-w-max">
       <form className="flex flex-col space-y-3" onSubmit={handleSubmit(handleAuth)}>
         <div className="space-y-3 md:space-y-0 md:flex md:space-x-4 md:items-center">
-          {!isLogin && (
-            <Input label="Name" type="text" register={register} fieldName="name" errors={errors} />
-          )}
+          {!isLogin && <Input label="Name" type="text" register={register} fieldName="name" errors={errors} />}
           <Input
             label="Username"
             type="text"
@@ -60,9 +60,7 @@ const AuthComponent = () => {
             errors={errors}
           />
         </div>
-        {!isLogin && (
-          <Input label="Email" type="email" fieldName="email" errors={errors} register={register} />
-        )}
+        {!isLogin && <Input label="Email" type="email" fieldName="email" errors={errors} register={register} />}
         <Input
           label="Password"
           type="password"
