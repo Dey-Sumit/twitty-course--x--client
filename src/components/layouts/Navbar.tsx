@@ -1,22 +1,26 @@
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { BiSearchAlt } from "react-icons/bi";
 import { SiTwitter } from "react-icons/si";
-import { useAuthState } from "src/contexts/auth.context";
+import { useAuthDispatch, useAuthState } from "src/contexts/auth.context";
 import { useLayoutDispatch } from "src/contexts/layout.context";
 // https://smiley.cool/emoticons.php
 const Navbar = () => {
   const { user } = useAuthState();
   const { push } = useRouter();
-  const dispatch = useLayoutDispatch();
+  const layoutDispatch = useLayoutDispatch();
+
+
+
 
   return (
     <div className="sticky top-0 left-0 z-10 flex items-center h-[10vh] justify-between p-3 space-x-4 bg-dark-600 text-dark-100 md:px-10 lg:px-16">
       <SiTwitter
         className="cursor-pointer text-primary sm:hidden"
         size={40}
-        onClick={() => dispatch({ type: "TOGGLE_NAVBAR" })}
+        onClick={() => layoutDispatch({ type: "TOGGLE_NAVBAR" })}
       />
       {/* search bar */}
       <div className="relative flex items-center justify-center w-full px-3 py-1 space-x-3 md:w-2/3 bg-dark-700">

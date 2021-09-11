@@ -5,17 +5,26 @@ import { MdExplore } from "react-icons/md";
 import { SiTwitter } from "react-icons/si";
 import { RiUserFill } from "react-icons/ri";
 import { IconType } from "react-icons";
-import { useAuthState } from "src/contexts/auth.context";
+import { useAuthDispatch, useAuthState } from "src/contexts/auth.context";
 import { useRouter } from "next/router";
 import { useLayoutDispatch, useLayoutState } from "src/contexts/layout.context";
+import axios from "axios";
 
 const Sidebar = () => {
   const { user } = useAuthState();
+  const authDispatch = useAuthDispatch();
 
   const router = useRouter();
 
   const layoutDispatch = useLayoutDispatch();
   const { showNavbar } = useLayoutState();
+
+  const handleLogout = async (e: any) => {
+    // need to show a modal, will do later
+    authDispatch({ type: "REMOVE_USER" });
+    router.push("/auth");
+    await axios.delete("/api/auth/logout");
+  };
 
   return (
     <div
@@ -36,7 +45,7 @@ const Sidebar = () => {
         {user && <SidebarItem Icon={IoMdNotifications} text="Noti" handler={() => router.push("/notifications/")} />}
         <SidebarItem Icon={MdExplore} text="Explore" handler={() => router.push("/explore")} />
 
-        {user && <SidebarItem Icon={IoMdLogOut} text="LogOut" handler={() => {}} />}
+        {user && <SidebarItem Icon={IoMdLogOut} text="LogOut" handler={handleLogout} />}
       </div>
       <div></div>
     </div>
