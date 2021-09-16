@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 export const sweetAlertOptions = {
   iconColor: "rgba(229, 231, 235,1)",
   heightAuto: false,
