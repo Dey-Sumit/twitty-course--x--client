@@ -16,6 +16,9 @@
   .button {
     @apply flex items-center justify-center p-2 text-lg font-bold text-white rounded-md bg-primary focus:outline-white;
   }
+  .nextImage > div {
+    @apply border-2 rounded-full;
+  }
   /* // TODO change */
   /* .customText-h3 {
     @apply mx-auto mt-3 font-semibold text-center;
@@ -73,4 +76,11 @@ button:focus {
   border-width: 1px;
   border-radius: 12px;
   border-color: #eeeeee;
+}
+
+/* .swal2-modal {
+  background-color: #1c2126 !important;
+} */
+.swal2-cancel {
+  margin-left: 25px !important;
 }

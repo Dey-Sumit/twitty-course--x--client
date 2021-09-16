@@ -36,16 +36,16 @@ const Navbar = () => {
           onClick={() => push(`/user/${user._id}`)}
         >
           {<span className="hidden mr-2 sm:block">Hey {user?.username}!</span>}
-          {
+          <div className="nextImage">
             <Image
               width={40}
               height={40}
               layout="fixed"
               src={user?.profilePictureURL}
               alt=""
-              className="rounded-full "
+              className="border-2 rounded-full"
             />
-          }
+          </div>
         </div>
       )}
     </div>

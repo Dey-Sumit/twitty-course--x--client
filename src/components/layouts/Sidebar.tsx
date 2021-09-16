@@ -10,6 +10,12 @@ import { useRouter } from "next/router";
 import { useLayoutDispatch, useLayoutState } from "src/contexts/layout.context";
 import axios from "axios";
 
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { sweetAlertOptions } from "@libs/sweetAlert";
+
+const MySwal = withReactContent(Swal);
+
 const Sidebar = () => {
   const { user } = useAuthState();
   const authDispatch = useAuthDispatch();
@@ -20,15 +26,27 @@ const Sidebar = () => {
   const { showNavbar } = useLayoutState();
 
   const handleLogout = async (e: any) => {
-    // need to show a modal, will do later
-    authDispatch({ type: "REMOVE_USER" });
-    router.push("/auth");
-    await axios.delete("/api/auth/logout");
+    MySwal.fire({
+      title: (
+        <div>
+          <p className="mb-2 text-xl text-white">Are You Sure?</p>
+          <p className="mb-4 text-sm text-gray-200">Good! Focus on Real Life</p>
+        </div>
+      ),
+      ...sweetAlertOptions,
+      iconHtml: <SiTwitter className="w-10 h-10 text-gray-200" />,
+    }).then(async (data) => {
+      if (data.isConfirmed) {
+        authDispatch({ type: "REMOVE_USER" });
+        router.push("/auth");
+        await axios.delete("/api/auth/logout");
+      }
+    });
   };
 
   return (
     <div
-      className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg flex z-10 sm:sticky top-0   max-w-max transform transition-all duration-300 ${
+      className={`bg-dark-700 fixed flex-col justify-between h-screen px-3 sm:px-6 py-8 pb-20 text-lg shadow-lg flex z-10 sm:sticky top-0   max-w-max transform transition-all duration-300  ${
         showNavbar ? "  translate-x-0" : "  -translate-x-full sm:translate-x-0"
       }`}
     >
@@ -40,7 +58,7 @@ const Sidebar = () => {
       />
       {/* </div> */}
       <div className="flex flex-col space-y-5 ">
-        <SidebarItem Icon={IoMdHome} text="Home" handler={() => router.push("/")} />
+        <SidebarItem Icon={IoMdHome} text="Home" handler={() => router.push(`/`)} />
         {user && <SidebarItem Icon={RiUserFill} text="Profile" handler={() => router.push(`/user/${user._id}`)} />}
         {user && <SidebarItem Icon={IoMdNotifications} text="Noti" handler={() => router.push("/notifications/")} />}
         <SidebarItem Icon={MdExplore} text="Explore" handler={() => router.push("/explore")} />
