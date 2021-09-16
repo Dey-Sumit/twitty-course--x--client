@@ -1,3 +1,4 @@
+import NextNProgress from "nextjs-progressbar";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 

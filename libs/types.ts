@@ -3,7 +3,7 @@ export interface User {
   name: string;
   username: string;
   password: string;
-  profilePicture: string;
+  profilePictureURL: string;
   bio: string;
   //   likes: string[];
   //   following: string[];

@@ -12,9 +12,6 @@ const Navbar = () => {
   const { push } = useRouter();
   const layoutDispatch = useLayoutDispatch();
 
-
-
-
   return (
     <div className="sticky top-0 left-0 z-10 flex items-center h-[10vh] justify-between p-3 space-x-4 bg-dark-600 text-dark-100 md:px-10 lg:px-16">
       <SiTwitter
@@ -39,7 +36,16 @@ const Navbar = () => {
           onClick={() => push(`/user/${user._id}`)}
         >
           {<span className="hidden mr-2 sm:block">Hey {user?.username}!</span>}
-          <Image width={40} height={40} layout="fixed" src={user?.profilePicture} alt="" className="rounded-full " />
+          {
+            <Image
+              width={40}
+              height={40}
+              layout="fixed"
+              src={user?.profilePictureURL}
+              alt=""
+              className="rounded-full "
+            />
+          }
         </div>
       )}
     </div>
